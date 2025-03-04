@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using SQLite;
 using MauiAppMinhasCompras.Models;
 
-namespace MauiAppMinhasCompras.Holpers
+namespace MauiAppMinhasCompras.Helpers
 {
     public class SQLiteDatabasehelper
     {
@@ -28,7 +28,7 @@ namespace MauiAppMinhasCompras.Holpers
         }
         public Task<int> Delete(int id)
         {
-           return conn.Table<Produto>().DeleteAsync(i => i.Id == id)
+            return conn.Table<Produto>().DeleteAsync(i => i.Id == id);
         }
 
         public Task<List<Produto>> GetAll() 
