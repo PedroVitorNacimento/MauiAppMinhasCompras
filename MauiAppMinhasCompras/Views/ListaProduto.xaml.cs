@@ -26,6 +26,7 @@ public partial class ListaProduto : ContentPage
     {
         try
         {
+            lista.Clear();
             // Obtém todos os produtos do banco de dados
             List<Produto> tmp = await App.Db.GetAll();
 
