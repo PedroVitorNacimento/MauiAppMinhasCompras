@@ -24,42 +24,58 @@ public partial class ListaProduto : ContentPage
     // Método que é chamado quando a tela aparece
     protected async override void OnAppearing()
     {
-        // Obtém todos os produtos do banco de dados
-        List<Produto> tmp = await App.Db.GetAll();
+        try
+        {
+            // Obtém todos os produtos do banco de dados
+            List<Produto> tmp = await App.Db.GetAll();
 
-        // Adiciona os produtos na coleção observável para exibição na interface
-        tmp.ForEach(i => lista.Add(i));
+            // Adiciona os produtos na coleção observável para exibição na interface
+            tmp.ForEach(i => lista.Add(i));
+        }
+
+        catch (Exception ex) {
+            // Exibe um alerta caso ocorra algum erro
+            await DisplayAlert("Ops", ex.Message, "ok");
+        }
     }
 
     // Evento chamado quando o usuário clica no botão "Adicionar"
-    private void ToolbarItem_Clicked(object sender, EventArgs e)
+    private async void ToolbarItem_Clicked(object sender, EventArgs e)
     {
         try
         {
             // Navega para a tela de cadastro de um novo produto
-            Navigation.PushAsync(new Views.NovoProduto());
+            await Navigation.PushAsync(new Views.NovoProduto());
         }
         catch (Exception ex)
         {
             // Exibe um alerta caso ocorra algum erro
-            DisplayAlert("Ops", ex.Message, "ok");
+           await DisplayAlert("Ops", ex.Message, "ok");
         }
     }
 
     // Evento chamado quando o texto no campo de pesquisa é alterado
     private async void txt_search_TextChanged(object sender, TextChangedEventArgs e)
     {
-        // Obtém o texto digitado pelo usuário
-        string q = e.NewTextValue;
+        try
+        {
+            // Obtém o texto digitado pelo usuário
+            string q = e.NewTextValue;
 
-        // Limpa a lista de produtos antes de adicionar os resultados da pesquisa
-        lista.Clear();
+            // Limpa a lista de produtos antes de adicionar os resultados da pesquisa
+            lista.Clear();
 
-        // Realiza a pesquisa no banco de dados com base no texto digitado
-        List<Produto> tmp = await App.Db.search(q);
+            // Realiza a pesquisa no banco de dados com base no texto digitado
+            List<Produto> tmp = await App.Db.search(q);
 
-        // Adiciona os produtos encontrados à lista observável
-        tmp.ForEach(i => lista.Add(i));
+            // Adiciona os produtos encontrados à lista observável
+            tmp.ForEach(i => lista.Add(i));
+        }
+        catch (Exception ex)
+        {
+            // Exibe um alerta caso ocorra algum erro
+            await DisplayAlert("Ops", ex.Message, "ok");
+        }
     }
 
     // Evento chamado quando o usuário clica no botão "Somar"
@@ -76,13 +92,31 @@ public partial class ListaProduto : ContentPage
     }
 
     // Variável para armazenar o item selecionado pelo usuário
-    private Produto itemSelecionado;
+    private Produto? itemSelecionado;
 
     // Evento chamado quando um item da lista é selecionado
+
+/* Alteração não mesclada do projeto 'MauiAppMinhasCompras (net8.0-ios)'
+Antes:
     private void lst_produtos_ItemSelected(object sender, SelectedItemChangedEventArgs e)
     {
-        // Armazena o produto selecionado na variável "itemSelecionado"
-        itemSelecionado = e.SelectedItem as Produto;
+Após:
+    private async Task lst_produtos_ItemSelectedAsync(object sender, SelectedItemChangedEventArgs e)
+    {
+*/
+    private  void lst_produtos_ItemSelectedAsync(object sender, SelectedItemChangedEventArgs e)
+    {
+        try
+        {
+            // Armazena o produto selecionado na variável "itemSelecionado"
+            itemSelecionado = e.SelectedItem as Produto;
+            Navigation.PushAsync(new Views.EditarProduto { BindingContext = itemSelecionado });
+        }
+        catch (Exception ex) 
+        {
+            // Exibe um alerta caso ocorra algum erro
+             DisplayAlert("Ops", ex.Message, "ok");
+        }
     }
 
     // Evento chamado quando o usuário clica no botão "Remover"

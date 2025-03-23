@@ -25,7 +25,7 @@
         <!-- Chama o evento quando o texto é alterado -->
 
         <!-- Lista de produtos -->
-        <ListView x:Name="lst_produtos" SelectionMode="Single" ItemSelected="lst_produtos_ItemSelected">
+        <ListView x:Name="lst_produtos" SelectionMode="Single" ItemSelected="lst_produtos_ItemSelectedAsync">
 
             <!-- Cabeçalho da lista com rótulos das colunas -->
             <ListView.Header>
